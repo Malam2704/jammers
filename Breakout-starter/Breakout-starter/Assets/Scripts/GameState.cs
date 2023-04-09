@@ -3,12 +3,14 @@ using System.Collections;
 
 public class GameState : MonoBehaviour 
 {
+	
 	// An enumeration of game states.
 	public enum State
 	{
 		Pause = 0,
 		Play = 1,
-		GameOver = 2
+		GameOver = 2,
+
 	};
 	
 	// Tracks the current state of the game.
@@ -23,6 +25,12 @@ public class GameState : MonoBehaviour
 	// The maximum number of tries.
 	private int maxTries;
 	
+	public int PlayerScore1 = 0;
+	public int PlayerScore2 = 0;
+
+	public ScoreBoard scoreBoard1;
+	public ScoreBoard2 scoreBoard2;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -40,19 +48,30 @@ public class GameState : MonoBehaviour
 	}
 	
 	// Updates the current state.
-	public void NextState ()
+	public void NextState (int player1 = 0)
 	{
 		// The ball has fallen out of the court...
 		if (CurrentState == State.Play && BallsLeft > 0)
 		{
 			// ...pause the game and wait for the player to serve the ball.
+			if(player1 == 1)
+			{
+				PlayerScore1++;
+				scoreBoard1.score(PlayerScore1);
+			}
+			else if(player1 == 0)
+			{
+				PlayerScore2++;
+				scoreBoard2.score(PlayerScore2);
+			}
+			
+			Debug.Log("player1 Score: " + PlayerScore1 + " player2 score: " + PlayerScore2);
 			CurrentState = State.Pause;
 		}
 		// The ball has been served...
 		else if (CurrentState == State.Pause)
 		{
 			// Remove a ball from the player's stockpile.
-			BallsLeft--;
 			
 			// ...so the gameplay has resumed!
 			CurrentState = State.Play;

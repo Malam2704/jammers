@@ -6,7 +6,7 @@ public class Ball : MonoBehaviour
 	private Range<float> xVelocityRange = new Range<float>(-20, 20);
 
     // The range of velocities at which the ball can travel in the y direction.
-    private Range<float> yVelocityRange = new Range<float>(15, 40);
+    private Range<float> yVelocityRange = new Range<float>(-8, 40);
 
     // Controls the amount of spin the paddle puts on the ball.
     private int paddleSpin = 750;
@@ -73,7 +73,15 @@ public class Ball : MonoBehaviour
 	private void CheckDeadBall ()
 	{
 		// If the ball is out of bounds, update the game state!
-		if ((transform.position.y < -15 || transform.position.y > 17) && state.CurrentState == GameState.State.Play) state.NextState();
+		if(transform.position.y < -15 && state.CurrentState == GameState.State.Play)
+		{
+			state.NextState(0);
+		}
+		else if(transform.position.y > 17  && state.CurrentState == GameState.State.Play)
+		{
+			state.NextState(1);
+		}
+		
 	}
 	
 	/// <summary>
@@ -105,7 +113,7 @@ public class Ball : MonoBehaviour
 		transform.position = new Vector3(0,0,0);
 
         // Set the ball in motion!
-		GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(xVelocityRange.Minimum, xVelocityRange.Maximum), yVelocityRange.Minimum, 0);
+		GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(xVelocityRange.Minimum, xVelocityRange.Maximum), Random.Range(yVelocityRange.Minimum, yVelocityRange.Maximum), 0);
 	}
 	
 	/// <summary>
